@@ -31,10 +31,98 @@ export const signup = async (
 ): Promise<IFormState> => {
   // Extract form data
   const email = formData.get("email")?.toString() ?? "";
-  const fullname = formData.get("fullname")?.toString() ?? "";
+  const fullName = formData.get("fullName")?.toString() ?? "";
   const password = formData.get("password")?.toString() ?? "";
   const passwordRepeat = formData.get("passwordRepeat")?.toString() ?? "";
 
+  // Validate inputs using the separate validation function
+  const validationResult = validateSignupInput(
+    email,
+    fullName,
+    password,
+    passwordRepeat
+  );
+
+  // If validation fails, return the validation result
+  if (validationResult.status !== 200) {
+    return validationResult;
+  }
+
+  try {
+    // Send Signup request to the server
+    const response = await fetch(
+      "http://codecamp.accellware.com/api/Users/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,
+          fullName,
+          password,
+          passwordRepeat,
+        }),
+      }
+    );
+
+    // Parse the API response
+    const result = await response.json();
+
+    // Handle API errors
+    if (!response.ok || !result.IsSuccess) {
+      // Initialize error states
+      let emailState = "";
+      const fullnameState = "";
+      const passwordState = "";
+      const passwordRepeatState = "";
+
+      // Map API validation errors to the respective fields
+      if (result.ValidationErrors) {
+        if (result.ValidationErrors.Username) {
+          emailState = result.ValidationErrors.Username.join(", ");
+        }
+      }
+
+      // Return API errors
+      return {
+        emailState,
+        fullnameState,
+        passwordState,
+        passwordRepeatState,
+        status: response.status,
+        message: result.Messages?.[0] || "Signup failed. Please try again.",
+      };
+    }
+
+    // Return success state
+    return {
+      emailState: "",
+      fullnameState: "",
+      passwordState: "",
+      passwordRepeatState: "",
+      status: response.status,
+      message: "Signup successful!",
+    };
+  } catch (error) {
+    // Handle network or server errors
+    return {
+      emailState: "",
+      fullnameState: "",
+      passwordState: "",
+      passwordRepeatState: "",
+      status: null,
+      message: `Signup failed: ${(error as Error).message}`,
+    };
+  }
+};
+
+function validateSignupInput(
+  email: string,
+  fullname: string,
+  password: string,
+  passwordRepeat: string
+): IFormState {
   // Validate inputs using zod
   const validation = signupSchema.safeParse({
     email,
@@ -73,75 +161,13 @@ export const signup = async (
       message: "Validation failed. Please check your inputs.",
     };
   }
-
-  try {
-    // Send Signup request to the server
-    const response = await fetch(
-      "http://codecamp.accellware.com/api/Users/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: email,
-          fullname,
-          password,
-          passwordRepeat,
-        }),
-      }
-    );
- 
-    // Parse the API response
-    const result = await response.json();
-
-    // Handle API errors
-    if (!response.ok || !result.IsSuccess) {
-      // Initialize error states
-      let emailState = "";
-      const fullnameState = "";
-      const passwordState = "";
-      const passwordRepeatState = "";
-
-      // Map API validation errors to the respective fields
-      if (result.ValidationErrors) {
-        if (result.ValidationErrors.Username) {
-          emailState = result.ValidationErrors.Username.join(", ");
-        }
-        if (result.ValidationErrors.PhoneNumber) {
-          // Handle phone number errors if needed
-        }
-      }
-
-      // Return API errors
-      return {
-        emailState,
-        fullnameState,
-        passwordState,
-        passwordRepeatState,
-        status: response.status,
-        message: result.Messages?.[0] || "Signup failed. Please try again.",
-      };
-    }
-
-    // Return success state
-    return {
-      emailState: "",
-      fullnameState: "",
-      passwordState: "",
-      passwordRepeatState: "",
-      status: response.status,
-      message: "Signup successful!",
-    };
-  } catch (error) {
-    // Handle network or server errors
-    return {
-      emailState: "",
-      fullnameState: "",
-      passwordState: "",
-      passwordRepeatState: "",
-      status: null,
-      message: `Signup failed: ${(error as Error).message}`,
-    };
-  }
-};
+  // If validation is successful, return a success state
+  return {
+    emailState: "",
+    fullnameState: "",
+    passwordState: "",
+    passwordRepeatState: "",
+    status: 200, // 200: Success
+    message: "Validation successful.",
+  };
+}

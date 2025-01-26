@@ -2,24 +2,19 @@
 
 import React, { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/Input";
-import { reset, IReset, valide, IValidate } from "@/actions/Reset";
-import SubmitButton from "@/components/SubmitButton";
-import FormStatePopup from "@/components/FormStatePopup";
-import Title from "@/components/Title";
+import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
+import { send, ISend } from "@/actions/SendCode";
+import SubmitButton from "@/components/auth_ui/SubmitButton";
+import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import Title from "@/components/auth_ui/Title";
 import Form from "next/form";
+import ResetPassword from "./ResetPassword";
 
 // Initial state for the reset form
-const initialResetState: IReset = {
+const initialResetState: ISend = {
   message: "",
+  username: "",
   usernameState: "",
-  status: null,
-};
-
-// Initial state for the validate form
-const initialValidateState: IValidate = {
-  message: "",
-  codeState: "",
   status: null,
 };
 
@@ -27,8 +22,8 @@ const ResetAndValidate = () => {
   const [showCodeInput, setShowCodeInput] = useState(false);
 
   // useFormState for the reset form
-  const [resetState, resetFormAction] = useFormState<IReset, FormData>(
-    reset,
+  const [resetState, resetFormAction] = useFormState<ISend, FormData>(
+    send,
     initialResetState
   );
 
@@ -52,7 +47,6 @@ const ResetAndValidate = () => {
           action={resetFormAction}
           className="flex flex-col gap-4 min-w-full"
         >
-          <div className="mb-6">
             <Input
               type="text"
               placeholder="Username or Email"
@@ -65,7 +59,6 @@ const ResetAndValidate = () => {
             >
               <InputErrorMessage state={resetState.usernameState} />
             </Input>
-          </div>
 
           {/* Submit Button */}
           <SubmitButton pending={resetPending}>Send Code</SubmitButton>
@@ -76,7 +69,7 @@ const ResetAndValidate = () => {
       )}
 
       {/* Validate Form (Code Input) */}
-      {showCodeInput && <EntreCode />}
+      {(showCodeInput && resetState.username) &&<ResetPassword username={ resetState.username} />}
     </>
   );
 };
@@ -84,38 +77,3 @@ const ResetAndValidate = () => {
 export default ResetAndValidate;
 
 // Code Input Component
-const EntreCode = () => {
-  const [validateState, validateFormAction] = useFormState<IValidate, FormData>(
-    valide,
-    initialValidateState
-  );
-  const { pending: validatePending } = useFormStatus();
-
-  return (
-    <Form
-      action={validateFormAction}
-      className="flex flex-col gap-2 min-w-full"
-    >
-      <div className="mb-6">
-        <Input
-          type="number"
-          placeholder="Enter your code"
-          name="code"
-          className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${
-            validateState.codeState
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-blue-500"
-          }`}
-        >
-          <InputErrorMessage state={validateState.codeState} />
-        </Input>
-      </div>
-
-      {/* Submit Button */}
-      <SubmitButton pending={validatePending}>Validate Code</SubmitButton>
-
-      {/* Display validate form state message as a popup */}
-      <FormStatePopup state={validateState} />
-    </Form>
-  );
-};

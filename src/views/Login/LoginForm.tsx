@@ -3,14 +3,14 @@
 import React from "react";
 import Form from "next/form";
 import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/Input";
+import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
 import { login, IFormState } from "@/actions/Login";
-import SubmitButton from "@/components/SubmitButton";
-import FormStatePopup from "@/components/FormStatePopup";
+import SubmitButton from "@/components/auth_ui/SubmitButton";
+import FormStatePopup from "@/components/auth_ui/FormStatePopup";
 
 // Initial state for the form
 const initialState: IFormState = {
-  message: "", // Initial state for the form
+  message: "", 
   usernameState: "",
   status: null,
   passwordState: "",
@@ -42,9 +42,9 @@ const LoginForm = () => {
       {/* Remember Me Checkbox */}
       <RememberMe />
       {/* Display form state message */}
-      
+
       {(!state.usernameState || !state.passwordState) && state.message && (
-        <FormStatePopup state={state} />
+        <FormStatePopup state={state} /> 
       )}
       {/* Submit button */}
       <SubmitButton pending={pending}>Log in</SubmitButton>

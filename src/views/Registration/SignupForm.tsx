@@ -3,16 +3,16 @@
 import React, { useState } from "react";
 import Form from "next/form";
 import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/Input";
+import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
 import { signup, IFormState } from "@/actions/Signup";
-import ConfirmPassword from "./ConfirmPassword";
-import SubmitButton from "@/components/SubmitButton";
-import PasswordValidation from "./ValidationPassword";
-import FormStatePopup from "@/components/FormStatePopup";
+import ConfirmPassword from "@/components/auth_ui/ConfirmPassword";
+import SubmitButton from "@/components/auth_ui/SubmitButton";
+import PasswordValidation from "@/components/auth_ui/ValidationPassword";
+import FormStatePopup from "@/components/auth_ui/FormStatePopup";
 
 // Initial state for the form
 const initialState: IFormState = {
-  message: "", // Initial state for the form
+  message: "", 
   emailState: "",
   fullnameState: "",
   status: null,
@@ -26,11 +26,13 @@ const SignupForm = () => {
     signup,
     initialState
   );
-
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   // useFormStaus hook to handle pending state
   const { pending } = useFormStatus();
+
+  // useState hooks to manage form input values (used for checking its strong passwords && matching confirm passwords )
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const handleSubmit = () => {
     setPassword("");
     setConfirmPassword("");
@@ -45,7 +47,7 @@ const SignupForm = () => {
         <InputErrorMessage state={state.emailState} />
       </Input>
 
-      <Input type="text" placeholder="Full Name" name="fullname">
+      <Input type="text" placeholder="Full Name" name="fullName">
         <InputErrorMessage state={state.emailState} />
       </Input>
 
@@ -85,5 +87,3 @@ const SignupForm = () => {
 };
 
 export default SignupForm;
-
-

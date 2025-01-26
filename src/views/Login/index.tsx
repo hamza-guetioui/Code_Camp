@@ -1,37 +1,41 @@
 import React from "react";
 import Link from "next/link";
 import LoginForm from "./LoginForm";
-import Title from "@/components/Title";
+import Title from "@/components/auth_ui/Title";
+import Container from "@/components/auth_ui/container";
 
 const Login = () => {
   return (
-    <main className="flex justify-center items-center h-screen">
-      <div className="w-1/3 p-8 bg-white rounded-lg shadow-lg flex flex-col justify-center items-center gap-4 ">
-        <Title>Login</Title>
-        <LoginForm />
-
-        <Signup>
-          <p>Don&apos;t have an account?</p>
-          <Link href="/registration" className="font-bold text-blue-500">
-            Sign up
-          </Link>
-        </Signup>
-        <Reset>
-          <p> Forgot your password?</p>
-          <Link href="/reset" className="font-bold text-blue-500">
-            Reset
-          </Link>
-        </Reset>
-      </div>
-    </main>
+    <Container>
+      <Title>Login</Title>
+      <LoginForm />
+      <GoToSignup link={"/registration"} />
+      <GoToReset link={"/reset"} />
+    </Container>
   );
 };
 
 export default Login;
 
-const Signup = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex gap-2 items-center">{children}</div>;
+const GoToSignup = ({ link }: { link: string }) => {
+  return (
+    <div className="flex gap-2 items-center">
+      {" "}
+      <p>Don&apos;t have an account?</p>
+      <Link href={link} className="font-bold text-blue-500">
+        Sign up
+      </Link>
+    </div>
+  );
 };
-const Reset = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex gap-2 items-center">{children}</div>;
+const GoToReset = ({ link }: { link: string }) => {
+  return (
+    <div className="flex gap-2 items-center">
+      {" "}
+      <p> Forgot your password?</p>
+      <Link href={link} className="font-bold text-blue-500">
+        Reset
+      </Link>
+    </div>
+  );
 };

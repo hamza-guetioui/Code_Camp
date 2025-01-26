@@ -23,7 +23,59 @@ export const login = async (
   const username = payload.get("username")?.toString() ?? "";
   const password = payload.get("password")?.toString() ?? "";
   const rememberMe = payload.get("rememberMe") === "on";
-  // Validate inputs using zod
+
+  // Validate inputs using the separate validation function
+  const validationResult = validateLoginInput(username, password);
+
+  // If validation fails, return the validation result
+  if (validationResult.status !== 200) {
+    return validationResult;
+  }
+
+  try {
+    // Send login request to the server
+    const response = await fetch(
+      "http://codecamp.accellware.com/api/Users/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password, rememberMe }),
+      }
+    );
+    const result = await response.json();
+    // Check if the response is successful
+    if (!response.ok && !result.isSuccess) {
+      return {
+        usernameState: "",
+        passwordState: "",
+        status: 400,
+        message: result.Messages[0],
+      };
+    }
+    // Parse the JSON body
+
+    console.log("Token:", result.token);
+    return {
+      usernameState: "",
+      passwordState: "",
+      status: 200,
+      message: `Login successful`,
+    };
+  } catch (error) {
+    // Handle network or server errors
+    return {
+      usernameState: "",
+      passwordState: "",
+      status: 500,
+      message: `Login failed: ${(error as Error).message}`,
+    };
+  }
+};
+
+// Validation function
+function validateLoginInput(username: string, password: string): IFormState {
   const validation = loginSchema.safeParse({ username, password });
 
   if (!validation.success) {
@@ -49,53 +101,11 @@ export const login = async (
     };
   }
 
-  try {
-    // Send login request to the server
-    const response = await fetch(
-      "http://codecamp.accellware.com/api/Users/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password, rememberMe }),
-      }
-    );
-
-    // Check if the response is successful
-    if (!response.ok) {
-      throw new Error("Login failed");
-    }
-
-    // Get the 'Set-Cookie' header
-    const setCookieHeader = response.headers.get("Set-Cookie");
-
-    // Define a regex to match the token
-    const regex = /\.AspNetCore\.Identity\.Application=([^;]+)/;
-
-    // Use RegExp.exec() to extract the token
-    let token = "";
-    if (setCookieHeader) {
-      const match = regex.exec(setCookieHeader);
-      if (match) {
-        token = match[1]; // The token is in the first capturing group
-      }
-    }
-
-    console.log("Token:", token);
-    return {
-      usernameState: "",
-      passwordState: "",
-      status: 200,
-      message: `Login successful`,
-    };
-  } catch (error) {
-    // Handle network or server errors
-    return {
-      usernameState: "",
-      passwordState: "",
-      status: 500,
-      message: `Login failed: ${(error as Error).message}`,
-    };
-  }
-};
+  // If validation is successful, return a success state
+  return {
+    usernameState: "",
+    passwordState: "",
+    status: 200, // 200: Success
+    message: "Validation successful.",
+  };
+}
