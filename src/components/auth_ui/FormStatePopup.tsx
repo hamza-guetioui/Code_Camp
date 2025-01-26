@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -6,9 +7,14 @@ interface FormStatePopupProps {
     status: number | null;
     message: string;
   };
+  className?: string;
 }
+const cn = (className?: string) => className ?? "";
 
-const FormStatePopup: React.FC<FormStatePopupProps> = ({ state }) => {
+const FormStatePopup: React.FC<FormStatePopupProps> = ({
+  state,
+  className,
+}) => {
   const [isVisible, setIsVisible] = useState(true);
 
   // Automatically hide the popup after 5 seconds
@@ -34,10 +40,12 @@ const FormStatePopup: React.FC<FormStatePopupProps> = ({ state }) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: -20, x:-50 }}
-          animate={{ opacity: 1, y: 0 ,x:-50}}
-          exit={{ opacity: 0, y: -20 ,x:-50 }}
-          className={`fied fixed top-4 right-1/3   py-4 px-12 rounded-lg shadow-lg flex items-center justify-between gap-4 ${popupStyles}`}
+          initial={{ opacity: 0, y: -20, x: -50 }}
+          animate={{ opacity: 1, y: 0, x: -50 }}
+          exit={{ opacity: 0, y: -20, x: -50 }}
+          className={`fied fixed top-16 right-1/3   py-4 px-12 rounded-lg shadow-lg flex items-center justify-between gap-4 ${popupStyles}${cn(
+            className
+          )}}`}
         >
           <p>{state.message}</p>
           <button

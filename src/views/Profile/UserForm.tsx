@@ -1,29 +1,30 @@
 "use client";
-
+import { IUserState, PUT_USER } from "@/actions/User";
 import React, { useState } from "react";
 import Form from "next/form";
-import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
-import { SignUp, IFormState } from "@/actions/Signup";
-import ConfirmPassword from "@/components/auth_ui/ConfirmPassword";
-import SubmitButton from "@/components/auth_ui/SubmitButton";
-import PasswordValidation from "@/components/auth_ui/ValidationPassword";
 import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import SubmitButton from "@/components/auth_ui/SubmitButton";
+import ConfirmPassword from "@/components/auth_ui/ConfirmPassword";
+import { InputErrorMessage } from "@/components/auth_ui/Input";
+import PasswordValidation from "@/components/auth_ui/ValidationPassword";
+import { useFormState, useFormStatus } from "react-dom";
+import { IUser } from "@/types/user";
+import Input from "./Input";
 
 // Initial state for the form
-const initialState: IFormState = {
-  message: "", 
+const initialState: IUserState = {
+  message: "",
   emailState: "",
+  usernameState: "",
   fullnameState: "",
   status: null,
   passwordState: "",
   passwordRepeatState: "",
 };
-
-const SignupForm = () => {
+const UserInfo = ({ user }: { user: IUser }) => {
   // useFormState hook to manage form state and actions
-  const [state, formAction] = useFormState<IFormState, FormData>(
-    SignUp,
+  const [state, formAction] = useFormState<IUserState, FormData>(
+    PUT_USER,
     initialState
   );
   // useFormStaus hook to handle pending state
@@ -43,19 +44,42 @@ const SignupForm = () => {
       className="flex flex-col gap-4 min-w-full"
       onSubmit={() => handleSubmit()}
     >
-      <Input type="email" placeholder="Email" name="email">
+      <Input
+        type="email"
+        placeholder="Email"
+        name="email"
+        value={user.username}
+        readOnly={true}
+        label="Email"
+        className="bg-slate-100 cursor-default"
+      >
         <InputErrorMessage state={state.emailState} />
       </Input>
-
-      <Input type="text" placeholder="Full Name" name="fullName">
+      <Input
+        type="text"
+        placeholder="Full Name"
+        name="fullName"
+        value={user.fullName}
+        label="Full Name"
+      >
+        <InputErrorMessage state={state.emailState} />
+      </Input>
+      <Input
+        type="text"
+        placeholder="User Name"
+        name="userName"
+        value={user.username}
+        label="User Name"
+      >
         <InputErrorMessage state={state.emailState} />
       </Input>
 
       <Input
         type="password"
-        placeholder="Password"
+        placeholder="New Password"
         name="password"
         onChange={(e) => setPassword(e.target.value)}
+        label="New Password"
       >
         <InputErrorMessage state={state.passwordState} />
         <PasswordValidation password={password} />
@@ -66,6 +90,7 @@ const SignupForm = () => {
         placeholder="Confirm Password"
         name="passwordRepeat"
         onChange={(e) => setConfirmPassword(e.target.value)}
+        label="Confirm Password"
       >
         <ConfirmPassword
           password={password}
@@ -80,10 +105,12 @@ const SignupForm = () => {
         !state.passwordRepeatState ||
         !state.fullnameState) &&
         state.message && <FormStatePopup state={state} />}
+
       {/* Submit button */}
-      <SubmitButton pending={pending}>Sign up</SubmitButton>
+      <SubmitButton pending={pending}>Update User</SubmitButton>
+      {/* submitb button not working the update api not available */}
     </Form>
   );
 };
 
-export default SignupForm;
+export default UserInfo;

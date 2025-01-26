@@ -1,7 +1,11 @@
 "use server";
 import { z } from "zod";
+import { cookies } from "next/headers";
+import { IUser } from "@/types/user";
+
 
 export interface IFormState {
+  user?: IUser;
   usernameState: string;
   passwordState: string;
   status: number | null;
@@ -15,7 +19,7 @@ const loginSchema = z.object({
 });
 
 // Login function
-export const login = async (
+export const loginAction = async (
   state: IFormState,
   payload: FormData
 ): Promise<IFormState> => {
@@ -55,9 +59,18 @@ export const login = async (
       };
     }
     // Parse the JSON body
+    // Extract the required fields
+    const { id, fullName, profilePicture, token, refreshToken, tokenExpiry } =
+      result;
+console.log(result)
+    // Set the token and refreshToken in cookies
+    const cookieStore = await cookies();
 
-    console.log("Token:", result.token);
+    cookieStore.set("token", token, { expires: new Date(tokenExpiry) }); // Set token cookie
+    cookieStore.set("refreshToken", refreshToken); // Set refreshToken cookie
+
     return {
+      user: { id, fullName, profilePicture, username },
       usernameState: "",
       passwordState: "",
       status: 200,

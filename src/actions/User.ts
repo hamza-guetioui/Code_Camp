@@ -1,20 +1,56 @@
 "use server";
-
+import { cookies } from "next/headers";
+import { IUser } from "@/types/user";
 import { z } from "zod";
 
-export interface IFormState {
+export const GET_USER = async (): Promise<IUser | null> => {
+  // Get the token from cookies
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value; // Retrieve the token value
+  if (!token) {
+    console.error("No token found in cookies.");
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      "http://codecamp.accellware.com/api/Users/current/info",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the bearer token to the headers
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user data: ${response.statusText}`);
+    }
+
+    const user: IUser = await response.json();
+    return user;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null;
+  }
+};
+
+export interface IUserState {
+  usernameState: string;
+  fullnameState: string;
   emailState: string;
   passwordState: string;
+  passwordRepeatState: string;
   status: number | null;
   message: string;
-  passwordRepeatState: string;
-  fullnameState: string;
 }
 
 // Define the schema for email and password validation
-const signupSchema = z
+const userSchema = z
   .object({
     email: z.string().email("Invalid email format"),
+    username: z.string().min(1, "Username cannot be empty"),
     fullname: z.string().min(1, "Full name cannot be empty"),
     password: z.string().min(1, "Password cannot be empty"),
     passwordRepeat: z.string().min(1, "Confirm password cannot be empty"),
@@ -25,19 +61,21 @@ const signupSchema = z
   });
 
 // Signup function
-export const SignUp = async (
-  prevState: IFormState,
+export const PUT_USER = async (
+  prevState: IUserState,
   formData: FormData
-): Promise<IFormState> => {
+): Promise<IUserState> => {
   // Extract form data
   const email = formData.get("email")?.toString() ?? "";
+  const username = formData.get("username")?.toString() ?? "";
   const fullName = formData.get("fullName")?.toString() ?? "";
   const password = formData.get("password")?.toString() ?? "";
   const passwordRepeat = formData.get("passwordRepeat")?.toString() ?? "";
 
   // Validate inputs using the separate validation function
-  const validationResult = validateSignupInput(
+  const validationResult = validateUserInfo(
     email,
+    username,
     fullName,
     password,
     passwordRepeat
@@ -51,7 +89,7 @@ export const SignUp = async (
   try {
     // Send Signup request to the server
     const response = await fetch(
-      "http://codecamp.accellware.com/api/Users/register",
+      "http://codecamp.accellware.com/api/Users/register", // *** not valid endpoint for Update User
       {
         method: "POST",
         headers: {
@@ -76,6 +114,7 @@ export const SignUp = async (
       const fullnameState = "";
       const passwordState = "";
       const passwordRepeatState = "";
+      const usernameState = "";
 
       // Map API validation errors to the respective fields
       if (result.ValidationErrors) {
@@ -87,45 +126,50 @@ export const SignUp = async (
       // Return API errors
       return {
         emailState,
+        usernameState,
         fullnameState,
         passwordState,
         passwordRepeatState,
         status: response.status,
-        message: result.Messages?.[0] || "Signup failed. Please try again.",
+        message: result.Messages?.[0] || "Faild to Update User",
       };
     }
 
     // Return success state
     return {
       emailState: "",
+      usernameState: "",
       fullnameState: "",
       passwordState: "",
       passwordRepeatState: "",
       status: response.status,
-      message: "Signup successful!",
+      message: "Update successful!",
     };
   } catch (error) {
     // Handle network or server errors
     return {
       emailState: "",
       fullnameState: "",
+      usernameState: "",
       passwordState: "",
       passwordRepeatState: "",
       status: null,
-      message: `Signup failed: ${(error as Error).message}`,
+      message: `Update failed : ${(error as Error).message}`,
     };
   }
 };
 
-function validateSignupInput(
+function validateUserInfo(
   email: string,
+  username: string,
   fullname: string,
   password: string,
   passwordRepeat: string
-): IFormState {
+): IUserState {
   // Validate inputs using zod
-  const validation = signupSchema.safeParse({
+  const validation = userSchema.safeParse({
     email,
+    username,
     fullname,
     password,
     passwordRepeat,
@@ -134,6 +178,7 @@ function validateSignupInput(
   if (!validation.success) {
     // Initialize error states
     let emailState = "";
+    let usernameState = "";
     let fullnameState = "";
     let passwordState = "";
     let passwordRepeatState = "";
@@ -148,12 +193,15 @@ function validateSignupInput(
         passwordState = err.message;
       } else if (err.path.includes("passwordRepeat")) {
         passwordRepeatState = err.message;
+      } else if (err.path.includes("username")) {
+        usernameState = err.message;
       }
     });
 
     // Return validation errors
     return {
       emailState,
+      usernameState,
       fullnameState,
       passwordState,
       passwordRepeatState,
@@ -164,6 +212,7 @@ function validateSignupInput(
   // If validation is successful, return a success state
   return {
     emailState: "",
+    usernameState: "",
     fullnameState: "",
     passwordState: "",
     passwordRepeatState: "",

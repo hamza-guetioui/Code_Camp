@@ -9,7 +9,7 @@ const Login = () => {
     <Container>
       <Title>Login</Title>
       <LoginForm />
-      <GoToSignup link={"/registration"} />
+      <GoToSignup link={"/register"} />
       <GoToReset link={"/reset"} />
     </Container>
   );

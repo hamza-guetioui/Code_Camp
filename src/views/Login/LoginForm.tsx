@@ -1,16 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Form from "next/form";
 import { useFormState, useFormStatus } from "react-dom";
 import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
-import { login, IFormState } from "@/actions/Login";
+import { loginAction, IFormState } from "@/actions/Login";
 import SubmitButton from "@/components/auth_ui/SubmitButton";
 import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import { useAuth } from "@/context/authContext";
 
 // Initial state for the form
 const initialState: IFormState = {
-  message: "", 
+  message: "",
   usernameState: "",
   status: null,
   passwordState: "",
@@ -24,12 +25,20 @@ const LoginForm = () => {
   // );
   // useFormState hook to manage form state and actions
   const [state, formAction] = useFormState<IFormState, FormData>(
-    login,
+    loginAction,
     initialState
   );
-
+  useEffect(() => {
+    console.log(state);
+  });
   // useFormStatus hook to handle pending state
   const { pending } = useFormStatus();
+  const { login } = useAuth();
+  if (state.status === 200 && state.user) {
+    const { user } = state;
+    login(user);
+    return;
+  }
   return (
     <Form action={formAction} className="flex flex-col gap-4 min-w-full">
       <Input type="text" placeholder="User name or Email" name="username">
@@ -44,7 +53,7 @@ const LoginForm = () => {
       {/* Display form state message */}
 
       {(!state.usernameState || !state.passwordState) && state.message && (
-        <FormStatePopup state={state} /> 
+        <FormStatePopup state={state} />
       )}
       {/* Submit button */}
       <SubmitButton pending={pending}>Log in</SubmitButton>

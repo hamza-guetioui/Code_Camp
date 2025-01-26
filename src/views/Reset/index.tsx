@@ -1,15 +1,14 @@
 import React from "react";
 import Link from "next/link";
 import ResetForm from "./ResetForm";
+import Container from "@/components/auth_ui/container";
 
 const Login = () => {
   return (
-    <main className="flex justify-center items-center h-screen">
-      <div className="w-1/3 p-8 bg-white rounded-lg shadow-lg flex flex-col justify-center items-center gap-4 ">
-        <ResetForm />
-        <Redirection />
-      </div>
-    </main>
+    <Container>
+      <ResetForm />
+      <Redirection />
+    </Container>
   );
 };
 
@@ -23,7 +22,6 @@ const Redirection = () => {
       <Link href="/login" className="font-bold text-blue-500">
         Login
       </Link>
-    
     </div>
   );
 };

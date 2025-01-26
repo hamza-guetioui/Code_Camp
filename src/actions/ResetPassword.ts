@@ -59,7 +59,6 @@ export const reset = async (
     );
 
     const result = await response.json();
-    console.log(result);
     // Check if the response is successful
     if (!response.ok && !result.isSuccess) {
       return {

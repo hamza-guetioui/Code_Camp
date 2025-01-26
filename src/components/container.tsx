@@ -11,17 +11,9 @@ const Container = forwardRef<
   React.HTMLAttributes<HTMLDivElement> & ContainerProps
 >(({ className, children, ...rest }, ref) => {
   return (
-    <main className="flex justify-center items-center h-screen">
-      <div
-        ref={ref}
-        className={`max-md:min-w-[80%] max-md:max-w-[80%] max-md:p-4 lg:w-1/3 p-8 bg-white rounded-lg shadow-lg flex flex-col justify-center items-center gap-4 ${cn(
-          className
-        )}`}
-        {...rest}
-      >
-        {children}
-      </div>
-    </main>
+    <div ref={ref} className={cn(className)} {...rest}>
+      {children}
+    </div>
   );
 });
 
