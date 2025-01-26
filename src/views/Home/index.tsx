@@ -1,14 +1,15 @@
-"use client"
-import { useAuth } from '@/context/authContext';
-import React from 'react'
-
+"use client";
+import React from "react";
+import Users from "./Users";
 
 const Index = () => {
-    const {isAuth , user} = useAuth();
-    console.log(user , isAuth);
   return (
-    <div>Index</div>
-  )
-}
+    <div>
+      
+        <Users />
+      
+    </div>
+  );
+};
 
-export default Index
+export default Index;
