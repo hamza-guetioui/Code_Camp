@@ -2,27 +2,32 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Define routes that don't require authentication
-const publicRoutes = ["/login", "/register","/reset"];
+const publicRoutes = ["/login", "/register", "/reset"];
 
 export function middleware(request: NextRequest) {
-  const isAuth = request.cookies.get("token"); // Assuming you use cookies for auth
+  const token = request.cookies.get("token"); // Assuming authentication token is stored in cookies
+  const isAuth = !!token; // Convert to boolean
   const pathname = request.nextUrl.pathname;
 
   // Allow access to public routes without authentication
   if (publicRoutes.includes(pathname)) {
-    return NextResponse.next(); // Continue to the route
+    return isAuth ? NextResponse.redirect(new URL("/dashboard", request.url)) : NextResponse.next();
   }
 
-  // Redirect to login if not authenticated
+  // Redirect authenticated users trying to access auth-related pages
   if (!isAuth) {
-    const url = new URL("/login", request.url);
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Allow access if authenticated
-  return NextResponse.next();
+  // Redirect "/" to dashboard for authenticated users
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  return NextResponse.next(); // Allow access to authenticated routes
 }
 
+// Middleware applies to all routes except API, static files, and Next.js internals
 export const config = {
-  matcher: ["/((?!api|_next|static).*)"], // Apply middleware to all routes except API, static files, etc.
+  matcher: ["/((?!api|_next|static).*)"],
 };

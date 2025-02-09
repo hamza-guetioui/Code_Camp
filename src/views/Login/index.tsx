@@ -1,41 +1,27 @@
 import React from "react";
-import Link from "next/link";
 import LoginForm from "./LoginForm";
 import Title from "@/components/auth_ui/Title";
-import Container from "@/components/auth_ui/container";
+import FormContainer from "@/components/auth_ui/FormContainer";
+import RedirectTo from "@/components/auth_ui/RedirectTo";
 
 const Login = () => {
   return (
-    <Container>
+    <FormContainer>
       <Title>Login</Title>
       <LoginForm />
-      <GoToSignup link={"/register"} />
-      <GoToReset link={"/reset"} />
-    </Container>
+      <RedirectTo
+        title={"Sign up"}
+        link={"/signup"}
+        label={"Don't have an account?"}
+      />
+      <RedirectTo
+        title={"Reset"}
+        link={"/reset"}
+        label={"Forgot your password?"}
+      />
+    </FormContainer>
   );
 };
 
 export default Login;
 
-const GoToSignup = ({ link }: { link: string }) => {
-  return (
-    <div className="flex gap-2 items-center">
-      {" "}
-      <p>Don&apos;t have an account?</p>
-      <Link href={link} className="font-bold text-blue-500">
-        Sign up
-      </Link>
-    </div>
-  );
-};
-const GoToReset = ({ link }: { link: string }) => {
-  return (
-    <div className="flex gap-2 items-center">
-      {" "}
-      <p> Forgot your password?</p>
-      <Link href={link} className="font-bold text-blue-500">
-        Reset
-      </Link>
-    </div>
-  );
-};

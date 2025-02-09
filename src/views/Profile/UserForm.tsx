@@ -1,5 +1,5 @@
 "use client";
-import { IUserState, PUT_USER } from "@/actions/User";
+import { IUserState, PUT_USER } from "@/lib/actions/User";
 import React, { useState } from "react";
 import Form from "next/form";
 import FormStatePopup from "@/components/auth_ui/FormStatePopup";
@@ -30,7 +30,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
   // useFormStaus hook to handle pending state
   const { pending } = useFormStatus();
 
-  // useState hooks to manage form input values (used for checking its strong passwords && matching confirm passwords )
+  // useState hooks to manage form input values (used for checking its strong password && matching confirm password )
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 

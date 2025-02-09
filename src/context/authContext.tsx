@@ -1,18 +1,13 @@
 "use client";
-import { GET_USER } from "@/actions/User";
+import { GET_USER } from "@/lib/actions/User";
 import { IUser } from "@/types/user";
 import { useCookies } from "next-client-cookies"; // Import useCookies
-import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define the context type
 interface AuthContextTypes {
   isAuth: boolean;
   loading: boolean;
-  user: IUser | null;
-  login: (data: IUser) => void; // Function to handle login
-  logout: () => void; // Function to handle logout
-  updateUser: (user: IUser) => void; // Function to update user details
 }
 
 // Create the context with a default value of null
@@ -21,31 +16,7 @@ const AuthContext = createContext<AuthContextTypes | null>(null);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true); // Add a loading state
-  const [user, setUser] = useState<IUser | null>(null);
   const cookies = useCookies(); // Initialize useCookies
-  const router = useRouter();
-
-  // Function to handle login
-  const login = (data: IUser) => {
-    setIsAuth(true);
-    setUser(data);
-    router.push("/");
-  };
-
-  // Function to handle logout
-  const logout = () => {
-    setIsAuth(false);
-    setUser(null);
-    // Remove the token and refreshToken from cookies
-    cookies.remove("token");
-    cookies.remove("refreshToken");
-    router.push("/login");
-  };
-
-  // Function to update user details
-  const updateUser = (user: IUser) => {
-    setUser(user);
-  };
 
   // Check for token and fetch user data on mount
   useEffect(() => {
@@ -59,15 +30,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // Replace this with your actual API call to fetch user data
           const data: IUser | null = await GET_USER();
           if (data !== null) {
-            setUser(data);
             setIsAuth(true);
             return;
           }
           setIsAuth(false);
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
+        } catch {
           setIsAuth(false);
-          setUser(null);
         } finally {
           setLoading(false); // Set loading to false after the check is complete
         }
@@ -76,7 +44,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       fetchUser();
     } else {
       setIsAuth(false);
-      setUser(null);
       setLoading(false); // Set loading to false if no token is found
     }
   }, [cookies]);
@@ -86,10 +53,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         isAuth,
         loading,
-        user,
-        login,
-        logout,
-        updateUser,
       }}
     >
       {children}

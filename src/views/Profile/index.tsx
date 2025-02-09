@@ -1,10 +1,11 @@
-import { GET_USER } from "@/actions/User";
+import { GET_USER } from "@/lib/actions/User";
 import Container from "@/components/container";
 import { IUser } from "@/types/user";
 import Link from "next/link";
 import React from "react";
 import Picture from "./Picture";
 import UserInfo from "./UserForm";
+import BackTo from "./BackTo";
 
 const Index = async () => {
   // Fetch user data
@@ -17,9 +18,11 @@ const Index = async () => {
 
   // Render user data
   return (
-    <main className="flex flex-col items-center justify-center">
+    <main className="flex flex-col items-center justify-center relative">
       <Info>
-        <Picture id={user.id} user={user} />
+        <BackTo path="/dashboard" title="Dashboad" />
+        {/* Picture need id as props to get User imageUrl from endpoint api */}
+        <Picture user={user} />
         <UserInfo user={user} />
       </Info>
     </main>

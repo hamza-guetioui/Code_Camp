@@ -28,11 +28,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          <CookiesProvider>
+        <CookiesProvider>
+          <AuthProvider>
             <Layout>{children}</Layout>
-          </CookiesProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </CookiesProvider>
       </body>
     </html>
   );

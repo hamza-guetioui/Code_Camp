@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faUser } from "@fortawesome/free-solid-svg-icons";
 import Container from "@/components/container";
-import { PUT_USER_PICTURE } from "@/actions/Picture";
+import { PUT_USER_PICTURE } from "@/lib/actions/Picture";
 import FormStatePopup from "@/components/auth_ui/FormStatePopup";
 type Props = {
   id: string; // The `id` used to name the uploaded image

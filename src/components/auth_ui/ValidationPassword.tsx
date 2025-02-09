@@ -8,8 +8,8 @@ interface PasswordValidationProps {
 const validatePassword = (password: string) => {
   const rules = [
     {
-      label: "At least 8 characters",
-      valid: password.length >= 8,
+      label: "At least 6 characters",
+      valid: password.length >= 6,
     },
     {
       label: "At least one uppercase letter",

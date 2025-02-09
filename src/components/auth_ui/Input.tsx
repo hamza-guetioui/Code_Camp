@@ -17,7 +17,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   } = props;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 relative mb-4">
       <input
         type={type} // Dynamic input type (text, password, email, etc.)
         placeholder={placeholder}
@@ -44,8 +44,8 @@ interface InputErrorMessageProps {
 export const InputErrorMessage: React.FC<InputErrorMessageProps> = ({ state }) => {
   return (
     <div
-      className={`text-red-500 text-sm transition-all duration-300 ease-in-out ${
-        state ? "opacity-100 h-6" : "opacity-0 h-0"
+      className={`absolute top-full text-red-500 text-sm transition-all duration-300 ease-in-out ${
+        state ? "opacity-100 h-6 translate-y-0" : "opacity-0 h-0 -translate-y-4"
       }`}
     >
       {state && <p>{state}</p>}

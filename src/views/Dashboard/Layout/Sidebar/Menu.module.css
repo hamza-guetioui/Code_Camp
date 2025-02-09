@@ -1,0 +1,17 @@
+.sd_menu {
+  @apply max-md:fixed top-[80px] left-0 max-md:h-[calc(100vh-64px)] min-h-screen  z-30 lg:w-[260px] bg-slate-50 lg:border-r-2 lg:border-slate-300/40;
+}
+.sd_menu_content {
+  @apply sticky top-[88px] lg:top-[60px] left-0 p-2 transform transition-transform duration-700 ease-in-out;
+}
+
+.sd_menu_content_open {
+  @apply max-md:block max-md:opacity-100 max-md:translate-x-0;
+}
+.sd_menu_content_close {
+  @apply max-md:hidden max-md:opacity-0 max-md:-translate-x-full;
+}
+
+.sd_menu_toggle_button {
+  @apply absolute flex items-center z-30 justify-center left-full top-1/2 -translate-y-1/2 py-4 pr-3 pl-1 bg-slate-50/30 rounded-r-xl lg:hidden hover:bg-slate-100/80;
+}
