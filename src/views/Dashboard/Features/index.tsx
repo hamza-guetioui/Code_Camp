@@ -1,12 +1,9 @@
-"use client";
 import React from "react";
-import Users from "./Users";
+import FeaturesList from "./FeaturesList";
 
 const Index = () => {
   return (
-    <main>
-      <Users />
-    </main>
+      <FeaturesList />
   );
 };
 

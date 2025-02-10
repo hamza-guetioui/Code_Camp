@@ -6,7 +6,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex">
+    <main className="lg:flex">
       <Layout>{children}</Layout>
     </main>
   );

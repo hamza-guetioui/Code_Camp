@@ -9,21 +9,23 @@ type MenuProps = {
   children: React.ReactNode;
 };
 
-const Sidebar: React.FC<MenuProps> = ({ children }) => {
+const Menu: React.FC<MenuProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Container className={cn.sd_menu}>
-      <ToggleButton
-        isOpen={isOpen}
-        onClick={() => setIsOpen((prev) => !prev)}
-      />
-      <SidebarContent isOpen={isOpen}>{children}</SidebarContent>
-    </Container>
+    <Overlay onClick={() => setIsOpen(false)} isOpen={isOpen}>
+      <Container className={cn.sd_menu}>
+        <ToggleButton
+          isOpen={isOpen}
+          onClick={() => setIsOpen((prev) => !prev)}
+        />
+        <SidebarContent isOpen={isOpen}>{children}</SidebarContent>
+      </Container>
+    </Overlay>
   );
 };
 
-export default Sidebar;
+export default Menu;
 
 // Toggle Button Component
 const ToggleButton: React.FC<{ isOpen: boolean; onClick: () => void }> = ({
@@ -54,10 +56,28 @@ const SidebarContent: React.FC<{
 );
 
 // Overlay Component
-// const Overlay: React.FC<{ onClick: () => void }> = ({ onClick }) => (
-//   <button
-//     onClick={onClick}
-//     className="fixed top-0 left-0 inset-0 w-screen h-screen z-10 bg-black/30 lg:hidden"
-//     aria-label="Close Menu"
-//   />
-// );
+const Overlay: React.FC<{
+    onClick: () => void;
+    children: React.ReactNode;
+    isOpen: boolean;
+  }> = ({ onClick, isOpen, children }) => {
+  
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      if (event.target === event.currentTarget) {
+        onClick(); // Only triggers when clicking on the overlay, not children
+      }
+    };
+  
+    return (
+      <Container
+        onClick={handleClick} // Handle click only on overlay
+        className={`overlay ${
+          isOpen
+            ? "max-md:fixed max-md:top-0 max-md:left-0 max-md:inset-0 max-md:w-screen max-md:h-screen max-md:bg-black/30"
+            : ""
+        }`}
+      >
+        {children}
+      </Container>
+    );
+  };

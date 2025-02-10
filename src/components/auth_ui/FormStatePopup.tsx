@@ -43,7 +43,7 @@ const FormStatePopup: React.FC<FormStatePopupProps> = ({
           initial={{ opacity: 0, y: -20, x: -50 }}
           animate={{ opacity: 1, y: 0, x: -50 }}
           exit={{ opacity: 0, y: -20, x: -50 }}
-          className={`fixed top-8 right-1/3 py-4 px-12 rounded-lg shadow-lg flex items-center justify-between gap-4 ${popupStyles}${cn(
+          className={`fixed top-12 right-1/3 py-4 px-12 z-50 rounded-lg shadow-lg flex items-center justify-between gap-4 ${popupStyles}${cn(
             className
           )}}`}
         >

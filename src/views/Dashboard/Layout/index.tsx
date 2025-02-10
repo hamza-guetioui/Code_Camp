@@ -1,6 +1,7 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import Menu from "./Sidebar/Menu";
+import Container from "@/components/container";
 
 type Props = {
   children: React.ReactNode;
@@ -12,7 +13,7 @@ const Index: React.FC<Props> = ({ children }) => {
       <Menu>
         <Sidebar />
       </Menu>
-      {children}
+      <Container className="w-full">{children}</Container>
     </>
   );
 };

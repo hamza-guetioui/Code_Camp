@@ -1,14 +1,11 @@
-"use client";
 import React from "react";
-import Users from "./Users";
-import Roles from "./Roles";
 import Container from "@/components/container";
+import { Title } from "@/components/dashboard_ui/Toolbar";
 
 const Index = () => {
   return (
-    <Container className="w-full">
-      <Users />
-      <Roles />
+    <Container className="p-4">
+      <Title>Dashboard</Title>
     </Container>
   );
 };

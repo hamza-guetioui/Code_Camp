@@ -5,7 +5,7 @@ const Logo = () => {
   return (
     <Link href={"/"}>
       <Image
-        src="next.svg"
+        src="/next.svg"
         alt="Next.js logo"
         width={148}
         height={38}

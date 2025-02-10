@@ -23,8 +23,8 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ onClick, user }) => {
         <Picture pictureUrl={user?.profilePicture} />
         <FontAwesomeIcon
           icon={faCaretDown}
-          className="text-xl hover:text-gray-800 hover:scale-110 transition-all duration-200 mt-1"
-        />
+          className="w-4 h-4 text-xl hover:text-gray-800 hover:scale-110 transition-all duration-200 mt-1"
+       />
       </button>
     </Container>
   );
@@ -49,7 +49,8 @@ const Picture = ({ pictureUrl }: { pictureUrl?: string | null }) => {
           className="object-cover w-full h-full"
         />
       ) : (
-        <FontAwesomeIcon icon={faUser} className="text-xl" />
+        <FontAwesomeIcon icon={faUser}   
+        className="w-5 h-5 text-slate-700" />
       )}
     </Container>
   );

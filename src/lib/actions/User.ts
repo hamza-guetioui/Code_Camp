@@ -8,6 +8,7 @@ export const GET_USER = async (): Promise<IUser | null> => {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value; // Retrieve the token value
   if (!token) {
+    console.error("No token found in cookies.");
     return null;
   }
 
@@ -55,7 +56,7 @@ const userSchema = z
     passwordRepeat: z.string().min(1, "Confirm password cannot be empty"),
   })
   .refine((data) => data.password === data.passwordRepeat, {
-    message: "Password do not match",
+    message: "Passwords do not match",
     path: ["passwordRepeat"], // Attach the error to the `passwordRepeat` field
   });
 
