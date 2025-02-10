@@ -1,5 +1,6 @@
 "use server";
 import { IFeature } from "@/types/feature";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
@@ -41,8 +42,8 @@ export const GET_FEATURE = async (id: string): Promise<IFeature | null> => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      next: { tags: ['FEATURE_DATA'] }
     });
-    console.log(response);
 
     if (!response.ok) {
       console.error(
@@ -106,6 +107,8 @@ export const POST_FEATURE = async (
       console.error(
         `Error creating feature: ${response.status} ${response.statusText}`
       );
+      revalidateTag('FEATURE_DATA')
+
       return {
         ...initialState,
         status: response.status,
@@ -163,6 +166,7 @@ export const PUT_FEATURE = async (
       console.error(
         `Error updating feature: ${response.status} ${response.statusText}`
       );
+      revalidateTag('FEATURE_DATA')
       return {
         ...initialState,
         status: response.status,
@@ -184,16 +188,24 @@ export const PUT_FEATURE = async (
 };
 
 // DELETE_FEATURE: delete feature by id
-interface IDeleteFormState {
-  status: number;
+export interface IDeleteFormState {
+  status: number | null;
   message: string;
 }
-export const DELETE_FEATURE = async (id: string): Promise<IDeleteFormState> => {
+export const DELETE_FEATURE = async (
+  initialState: IDeleteFormState,
+  payload: FormData
+): Promise<IDeleteFormState> => {
+  console.log("object");
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
 
   if (!token) {
     return { status: 401, message: "Unauthorized" };
+  }
+  const id = payload.get("id")?.toString() ?? "";
+  if (id == undefined) {
+    return { status: 400, message: "Invalid id" };
   }
 
   try {
@@ -206,6 +218,8 @@ export const DELETE_FEATURE = async (id: string): Promise<IDeleteFormState> => {
       console.error(
         `Error deleting feature: ${response.status} ${response.statusText}`
       );
+      revalidateTag('FEATURE_DATA')
+
       return {
         status: response.status,
         message: `Error: ${response.statusText}`,
