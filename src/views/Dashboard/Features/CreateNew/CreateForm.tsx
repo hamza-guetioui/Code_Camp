@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "next/form";
 import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
+import Input, { InputErrorMessage } from "@/components/form_ui/Input";
 import { POST_FEATURE, IFormState } from "@/lib/actions/Feature";
-import SubmitButton from "@/components/auth_ui/SubmitButton";
-import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import SubmitButton from "@/components/form_ui/SubmitButton";
+import { useRefresh } from "@/context/refrechContext";
+import { useAlert } from "@/context/alertContext";
 
 // Initial state for the form
 const initialState: IFormState = {
@@ -37,6 +38,19 @@ const CreateForm = () => {
     state.codeState = "";
   };
   const { pending } = useFormStatus();
+
+  const { refreshData } = useRefresh();
+  const { handleAlert } = useAlert();
+  useEffect(() => {
+    if (state.message && state.status) {
+      if (state.status === 200) {
+        refreshData();
+      }
+      if (!state.nameState || !state.codeState) {
+        handleAlert({ message: state.message, status: state.status });
+      }
+    }
+  }, [state, refreshData]);
   return (
     <Form action={formAction} className="flex flex-col gap-4 min-w-full">
       <Input
@@ -58,10 +72,6 @@ const CreateForm = () => {
         <InputErrorMessage state={state.nameState} />
       </Input>
 
-      {/* A popup displays the returned form state message for both success and error cases */}
-      {(!state.nameState || !state.codeState) && state.message && (
-        <FormStatePopup state={state} />
-      )}
       {/* Submit button */}
       <SubmitButton pending={pending}>Create</SubmitButton>
     </Form>

@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import RequistForm from "./RequistForm";
-import FormContainer from "@/components/auth_ui/FormContainer";
-import RedirectTo from "@/components/auth_ui/RedirectTo";
-import Title from "@/components/auth_ui/Title";
+import FormContainer from "@/components/form_ui/FormContainer";
+import RedirectTo from "@/components/form_ui/RedirectTo";
+import Title from "@/components/form_ui/FormTitle";
 import ResetForm from "./ResetForm";
-import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import FormStatePopup from "@/components/form_ui/FormStatePopup";
 
 const REQUIST_FORM_DESCRIPTION =
   "Enter your email or username to receive a verification code for resetting your password.";
@@ -49,7 +49,7 @@ const Index = () => {
         label="Already have an account?"
       />
       {/* Display reset form state message as a popup */}
-      {(state.message && state.status === 200) && (
+      {state.message && state.status === 200 && (
         <FormStatePopup state={state} />
       )}
     </FormContainer>

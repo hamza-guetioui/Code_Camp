@@ -3,12 +3,12 @@
 import React, { useState } from "react";
 import Form from "next/form";
 import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
+import Input, { InputErrorMessage } from "@/components/form_ui/Input";
 import { SignUp, IFormState } from "@/lib/actions/Signup";
-import ConfirmPassword from "@/components/auth_ui/ConfirmPassword";
-import SubmitButton from "@/components/auth_ui/SubmitButton";
-import PasswordValidation from "@/components/auth_ui/ValidationPassword";
-import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import ConfirmPassword from "@/components/form_ui/ConfirmPassword";
+import SubmitButton from "@/components/form_ui/SubmitButton";
+import PasswordStrengthChecklist from "@/components/form_ui/PasswordStrengthChecklist";
+import FormStatePopup from "@/components/form_ui/FormStatePopup";
 
 // Initial state for the form
 const initialState: IFormState = {
@@ -84,7 +84,7 @@ const SignupForm = () => {
         onChange={(event) => handlePasswordChange(event)}
       >
         <InputErrorMessage state={state.passwordState} />
-        <PasswordValidation password={password} />
+        <PasswordStrengthChecklist password={password} />
       </Input>
 
       <Input

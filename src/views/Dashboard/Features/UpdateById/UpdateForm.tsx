@@ -1,12 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "next/form";
 import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
+import Input, { InputErrorMessage } from "@/components/form_ui/Input";
 import { PUT_FEATURE, IFormState } from "@/lib/actions/Feature";
-import SubmitButton from "@/components/auth_ui/SubmitButton";
-import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import SubmitButton from "@/components/form_ui/SubmitButton";
 import { IFeature } from "@/types/feature";
+import { useRefresh } from "@/context/refrechContext";
+import { useAlert } from "@/context/alertContext";
 
 // Initial state for the form
 const initialState: IFormState = {
@@ -29,6 +30,20 @@ const UpdateForm = ({ feature }: { feature: IFeature }) => {
     PUT_FEATURE,
     initialState
   );
+
+  const { pending } = useFormStatus();
+  const { refreshData } = useRefresh();
+  const { handleAlert } = useAlert();
+  useEffect(() => {
+    if (state.message && state.status) {
+      if (state.status === 200) {
+        refreshData();
+      }
+      if (!state.nameState || !state.codeState) {
+        handleAlert({ message: state.message, status: state.status });
+      }
+    }
+  }, [state, refreshData]);
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
     state.nameState = "";
@@ -37,7 +52,6 @@ const UpdateForm = ({ feature }: { feature: IFeature }) => {
     setCode(e.target.value);
     state.codeState = "";
   };
-  const { pending } = useFormStatus();
   return (
     <Form action={formAction} className="flex flex-col gap-4 min-w-full">
       <Input type="hidden" readOnly={true} name="id" value={feature.id} />
@@ -61,10 +75,6 @@ const UpdateForm = ({ feature }: { feature: IFeature }) => {
         <InputErrorMessage state={state.nameState} />
       </Input>
 
-      {/* A popup displays the returned form state message for both success and error cases */}
-      {(!state.nameState || !state.codeState) && state.message && (
-        <FormStatePopup state={state} />
-      )}
       {/* Submit button */}
       <SubmitButton pending={pending}>Edit</SubmitButton>
     </Form>

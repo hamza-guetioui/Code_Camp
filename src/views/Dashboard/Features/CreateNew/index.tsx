@@ -1,10 +1,7 @@
-
 import React from "react";
 import CreateForm from "./CreateForm";
-import {Title} from "@/components/dashboard_ui/Toolbar";
-import FormContainer from "@/components/auth_ui/FormContainer";
-
-
+import { Title } from "@/components/dashboard_ui/Toolbar";
+import FormContainer from "@/components/form_ui/FormContainer";
 
 const Index = () => {
   return (
@@ -16,4 +13,3 @@ const Index = () => {
 };
 
 export default Index;
-

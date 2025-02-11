@@ -2,10 +2,10 @@
 
 import React, { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
+import Input, { InputErrorMessage } from "@/components/form_ui/Input";
 import { requist, IRequist } from "@/lib/actions/RequistCode";
-import SubmitButton from "@/components/auth_ui/SubmitButton";
-import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import SubmitButton from "@/components/form_ui/SubmitButton";
+import FormStatePopup from "@/components/form_ui/FormStatePopup";
 import Form from "next/form";
 
 // Initial state for the reset form

@@ -1,4 +1,4 @@
-import LogoutForm from "@/components/auth_ui/Logout";
+import LogoutForm from "@/components/dashboard_ui/Logout";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";

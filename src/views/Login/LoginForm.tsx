@@ -1,12 +1,12 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Form from "next/form";
 import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
+import Input, { InputErrorMessage } from "@/components/form_ui/Input";
 import { loginAction, IFormState } from "@/lib/actions/Login";
-import SubmitButton from "@/components/auth_ui/SubmitButton";
-import FormStatePopup from "@/components/auth_ui/FormStatePopup";
-import RememberMe from "@/components/auth_ui/RememberMe";
+import SubmitButton from "@/components/form_ui/SubmitButton";
+import FormStatePopup from "@/components/form_ui/FormStatePopup";
+import RememberMe from "@/components/form_ui/RememberMe";
 
 // Initial state for the form
 const initialState: IFormState = {
@@ -31,21 +31,33 @@ const LoginForm = () => {
   );
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
-    state.usernameState = ""
-  }
+    state.usernameState = "";
+  };
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    state.passwordState = ""
-  }
-  const { pending } = useFormStatus()
+    state.passwordState = "";
+  };
+  const { pending } = useFormStatus();
   return (
     <Form action={formAction} className="flex flex-col gap-4 min-w-full">
       {/* <Input type="hidden" value={csrfToken} name="csrf_token" /> */}
-      <Input type="text" placeholder="User name or Email" name="username" value={username} onChange={(event)=> handleUsernameChange(event)}>
+      <Input
+        type="text"
+        placeholder="User name or Email"
+        name="username"
+        value={username}
+        onChange={(event) => handleUsernameChange(event)}
+      >
         <InputErrorMessage state={state.usernameState} />
       </Input>
 
-      <Input type="password" placeholder="Password" name="password" value={password} onChange={(event)=> handlePasswordChange(event)}>
+      <Input
+        type="password"
+        placeholder="Password"
+        name="password"
+        value={password}
+        onChange={(event) => handlePasswordChange(event)}
+      >
         <InputErrorMessage state={state.passwordState} />
       </Input>
       {/* Remember Me Checkbox */}
@@ -62,5 +74,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
-

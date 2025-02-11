@@ -1,3 +1,5 @@
+import { AlertProvider } from "@/context/alertContext";
+import { RefreshProvider } from "@/context/refrechContext";
 import Layout from "@/views/Dashboard/Layout";
 
 export default function RootLayout({
@@ -6,8 +8,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="lg:flex">
-      <Layout>{children}</Layout>
-    </main>
+    <RefreshProvider>
+      <AlertProvider>
+        <Layout>{children}</Layout>
+      </AlertProvider>
+    </RefreshProvider>
   );
 }

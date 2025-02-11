@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import Input, { InputErrorMessage } from "@/components/auth_ui/Input";
+import Input, { InputErrorMessage } from "@/components/form_ui/Input";
 import { reset, IReset } from "@/lib/actions/ResetPassword";
-import SubmitButton from "@/components/auth_ui/SubmitButton";
-import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import SubmitButton from "@/components/form_ui/SubmitButton";
+import FormStatePopup from "@/components/form_ui/FormStatePopup";
 import Form from "next/form";
-import ConfirmPassword from "@/components/auth_ui/ConfirmPassword";
-import PasswordValidation from "@/components/auth_ui/ValidationPassword";
+import ConfirmPassword from "@/components/form_ui/ConfirmPassword";
+import PasswordStrengthChecklist from "@/components/form_ui/PasswordStrengthChecklist";
 
 // Initial state for the reset form
 const initialState: IReset = {
@@ -36,64 +36,62 @@ const ResetForm = ({ username }: { username: string }) => {
   };
   return (
     <div>
-       <Form
-      action={FormAction}
-      className="flex flex-col gap-2 min-w-full"
-      onSubmit={handleSubmit}
-    >
-      <Input
-        type="text"
-        value={username}
-        name="username"
-        readOnly={username.length > 0}
-      ></Input>
-      <Input
-        type="number"
-        placeholder="Enter your code"
-        name="code"
-        className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${
-          state.codeState
-            ? "border-red-500 focus:ring-red-500"
-            : "border-gray-300 focus:ring-blue-500"
-        }`}
+      <Form
+        action={FormAction}
+        className="flex flex-col gap-2 min-w-full"
+        onSubmit={handleSubmit}
       >
-        <InputErrorMessage state={state.codeState} />
-      </Input>
+        <Input
+          type="text"
+          value={username}
+          name="username"
+          readOnly={username.length > 0}
+        ></Input>
+        <Input
+          type="number"
+          placeholder="Enter your code"
+          name="code"
+          className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${
+            state.codeState
+              ? "border-red-500 focus:ring-red-500"
+              : "border-gray-300 focus:ring-blue-500"
+          }`}
+        >
+          <InputErrorMessage state={state.codeState} />
+        </Input>
 
-      <Input
-        type="password"
-        placeholder="Password"
-        name="password"
+        <Input
+          type="password"
+          placeholder="Password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        >
+          <InputErrorMessage state={state.passwordState} />
+          <PasswordStrengthChecklist password={password} />
+        </Input>
 
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      >
-        <InputErrorMessage state={state.passwordState} />
-        <PasswordValidation password={password} />
-      </Input>
+        <Input
+          type="password"
+          placeholder="Confirm Password"
+          name="passwordRepeat"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        >
+          <ConfirmPassword
+            password={password}
+            confirmPassword={confirmPassword}
+          />
+          <InputErrorMessage state={state.passwordRepeatState} />
+        </Input>
 
-      <Input
-        type="password"
-        placeholder="Confirm Password"
-        name="passwordRepeat"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-      >
-        <ConfirmPassword
-          password={password}
-          confirmPassword={confirmPassword}
-        />
-        <InputErrorMessage state={state.passwordRepeatState} />
-      </Input>
+        {/* Submit Button */}
+        <SubmitButton pending={resetPending}>Reset Password</SubmitButton>
 
-      {/* Submit Button */}
-      <SubmitButton pending={resetPending}>Reset Password</SubmitButton>
-
-      {/* Display reset form state message as a popup */}
-      <FormStatePopup state={state} />
-    </Form>
+        {/* Display reset form state message as a popup */}
+        <FormStatePopup state={state} />
+      </Form>
     </div>
-   
   );
 };
 

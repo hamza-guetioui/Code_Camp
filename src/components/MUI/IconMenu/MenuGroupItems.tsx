@@ -1,9 +1,9 @@
-import * as React from "react";
+import React, { useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Link from "next/link";
-import Container from "../container";
+import Container from "@/components/container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography } from "@mui/material";
 import {
@@ -14,9 +14,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 type MenuGroupItemsProps = {
-  children: React.ReactElement; // Typing children as a single React element (e.g., icon)
-  label: string;
-  options: {
+  readonly children: React.ReactElement;
+  readonly label: string;
+  readonly options: {
     label: string;
     link: string;
     type: string;
@@ -28,8 +28,7 @@ export default function MenuGroupItems({
   label,
   options,
 }: MenuGroupItemsProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
   return (
@@ -42,7 +41,6 @@ export default function MenuGroupItems({
         </Typography>
       </MenuItem>
       {isOpen && <DropMenu options={options} />}{" "}
-      {/* Conditional rendering for dropdown */}
     </Container>
   );
 }
@@ -52,14 +50,13 @@ const DropMenu: React.FC<{ options: MenuGroupItemsProps["options"] }> = ({
 }) => (
   <Container className="pl-9">
     {options.map((option) => (
-      <Link  key={option.label} href={option.link} passHref>
-               <MenuItem>
+      <Link key={option.label} href={option.link} passHref>
+        <MenuItem>
           <ListItemIcon>
             <FontAwesomeIcon icon={option.type === "list" ? faList : faAdd} />
           </ListItemIcon>
           <ListItemText primary={option.label} />
         </MenuItem>
-   
       </Link>
     ))}
   </Container>

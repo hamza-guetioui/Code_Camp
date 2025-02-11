@@ -16,6 +16,7 @@ export const GET_FEATURES = async (): Promise<IFeature[] | null> => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      next: { tags: ['FEATURES_DATA'] }
     });
 
     if (!response.ok) {
@@ -42,7 +43,7 @@ export const GET_FEATURE = async (id: string): Promise<IFeature | null> => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      next: { tags: ['FEATURE_DATA'] }
+     
     });
 
     if (!response.ok) {
@@ -107,8 +108,7 @@ export const POST_FEATURE = async (
       console.error(
         `Error creating feature: ${response.status} ${response.statusText}`
       );
-      revalidateTag('FEATURE_DATA')
-
+      revalidateTag('FEATURES_DATA')
       return {
         ...initialState,
         status: response.status,
@@ -166,7 +166,7 @@ export const PUT_FEATURE = async (
       console.error(
         `Error updating feature: ${response.status} ${response.statusText}`
       );
-      revalidateTag('FEATURE_DATA')
+      revalidateTag('FEATURES_DATA')
       return {
         ...initialState,
         status: response.status,
@@ -218,8 +218,7 @@ export const DELETE_FEATURE = async (
       console.error(
         `Error deleting feature: ${response.status} ${response.statusText}`
       );
-      revalidateTag('FEATURE_DATA')
-
+      revalidateTag('FEATURES_DATA')
       return {
         status: response.status,
         message: `Error: ${response.statusText}`,

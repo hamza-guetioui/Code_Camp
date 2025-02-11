@@ -3,9 +3,9 @@ import React from "react";
 
 import Container from "@/components/container";
 
-import IconMenu from "@/components/MUI/Menu";
-import MenuGroupItems from "@/components/MUI/MenuGroupItems";
-import MenuItem from "@/components/MUI/MenuItem";
+import IconMenu from "@/components/MUI/IconMenu";
+import MenuGroupItems from "@/components/MUI/IconMenu/MenuGroupItems";
+import MenuItem from "@/components/MUI/IconMenu/MenuItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartLine, faCompass } from "@fortawesome/free-solid-svg-icons";
 

@@ -2,11 +2,11 @@
 import { IUserState, PUT_USER } from "@/lib/actions/User";
 import React, { useState } from "react";
 import Form from "next/form";
-import FormStatePopup from "@/components/auth_ui/FormStatePopup";
-import SubmitButton from "@/components/auth_ui/SubmitButton";
-import ConfirmPassword from "@/components/auth_ui/ConfirmPassword";
-import { InputErrorMessage } from "@/components/auth_ui/Input";
-import PasswordValidation from "@/components/auth_ui/ValidationPassword";
+import FormStatePopup from "@/components/form_ui/FormStatePopup";
+import SubmitButton from "@/components/form_ui/SubmitButton";
+import ConfirmPassword from "@/components/form_ui/ConfirmPassword";
+import { InputErrorMessage } from "@/components/form_ui/Input";
+import PasswordStrengthChecklist from "@/components/form_ui/PasswordStrengthChecklist";
 import { useFormState, useFormStatus } from "react-dom";
 import { IUser } from "@/types/user";
 import Input from "./Input";
@@ -82,7 +82,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
         label="New Password"
       >
         <InputErrorMessage state={state.passwordState} />
-        <PasswordValidation password={password} />
+        <PasswordStrengthChecklist password={password} />
       </Input>
 
       <Input

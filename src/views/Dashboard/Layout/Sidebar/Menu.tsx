@@ -71,7 +71,7 @@ const Overlay: React.FC<{
     return (
       <Container
         onClick={handleClick} // Handle click only on overlay
-        className={`overlay ${
+        className={`overlay z-30 ${
           isOpen
             ? "max-md:fixed max-md:top-0 max-md:left-0 max-md:inset-0 max-md:w-screen max-md:h-screen max-md:bg-black/30"
             : ""

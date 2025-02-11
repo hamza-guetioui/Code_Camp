@@ -2,8 +2,8 @@
 import React from "react";
 import Form from "next/form";
 import { useFormState, useFormStatus } from "react-dom";
-import SubmitButton from "@/components/auth_ui/SubmitButton";
-import FormStatePopup from "@/components/auth_ui/FormStatePopup";
+import SubmitButton from "@/components/form_ui/SubmitButton";
+import FormStatePopup from "@/components/form_ui/FormStatePopup";
 import { logoutAction, IFormState } from "@/lib/actions/Logout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";

@@ -1,8 +1,8 @@
 import React from "react";
 import LoginForm from "./LoginForm";
-import Title from "@/components/auth_ui/Title";
-import FormContainer from "@/components/auth_ui/FormContainer";
-import RedirectTo from "@/components/auth_ui/RedirectTo";
+import Title from "@/components/form_ui/FormTitle";
+import FormContainer from "@/components/form_ui/FormContainer";
+import RedirectTo from "@/components/form_ui/RedirectTo";
 
 const Login = () => {
   return (
@@ -24,4 +24,3 @@ const Login = () => {
 };
 
 export default Login;
-

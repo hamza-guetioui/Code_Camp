@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 interface FormStatePopupProps {
   state: {
@@ -33,8 +35,8 @@ const FormStatePopup: React.FC<FormStatePopupProps> = ({
   // Determine the popup style based on the status
   const popupStyles =
     state.status === 200
-      ? "bg-green-500 text-white" // Success style
-      : "bg-red-500 text-white"; // Error style
+      ? "bg-green-400 text-white" // Success style
+      : "bg-red-400 text-white"; // Error style
 
   return (
     <AnimatePresence>
@@ -43,16 +45,16 @@ const FormStatePopup: React.FC<FormStatePopupProps> = ({
           initial={{ opacity: 0, y: -20, x: -50 }}
           animate={{ opacity: 1, y: 0, x: -50 }}
           exit={{ opacity: 0, y: -20, x: -50 }}
-          className={`fixed top-12 right-1/3 py-4 px-12 z-50 rounded-lg shadow-lg flex items-center justify-between gap-4 ${popupStyles}${cn(
+          className={`fixed text-white top-12 right-1/3 py-2 px-8 z-50 rounded-lg shadow-lg flex items-center justify-between gap-4 ${popupStyles}${cn(
             className
           )}}`}
         >
-          <p>{state.message}</p>
+          <p className="text-lg">{state.message}</p>
           <button
             onClick={() => setIsVisible(false)}
-            className="text-white font-bold text-3xl hover:text-gray-200 focus:outline-none"
+            className=" hover:text-slate-200 focus:outline-none text-2xl"
           >
-            &times;
+            <FontAwesomeIcon icon={faTimes} />
           </button>
         </motion.div>
       )}

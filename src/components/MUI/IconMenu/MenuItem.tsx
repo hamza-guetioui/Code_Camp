@@ -5,9 +5,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Link from "next/link";
 
 type IconMenuItemProps = {
-  children: React.ReactElement; // Typing specifically for an icon or component
-  label: string;
-  link: string;
+  readonly children: React.ReactElement; // Typing specifically for an icon or component
+  readonly label: string;
+  readonly link: string;
 };
 
 export default function IconMenuItem({
@@ -17,7 +17,7 @@ export default function IconMenuItem({
 }: IconMenuItemProps) {
   return (
     <Link href={link} passHref>
-      <MenuItem >
+      <MenuItem>
         <ListItemIcon>{children}</ListItemIcon>
         <ListItemText primary={label} />
       </MenuItem>
