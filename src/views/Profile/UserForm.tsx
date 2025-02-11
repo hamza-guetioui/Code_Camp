@@ -31,6 +31,8 @@ const UserInfo = ({ user }: { user: IUser }) => {
   const { pending } = useFormStatus();
 
   // useState hooks to manage form input values (used for checking its strong password && matching confirm password )
+  const [fullName, setFullName] = useState(user.fullName ?? "");
+  const [username, setUsername] = useState(user.username ?? "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -59,7 +61,8 @@ const UserInfo = ({ user }: { user: IUser }) => {
         type="text"
         placeholder="Full Name"
         name="fullName"
-        value={user.fullName}
+        onChange={(e) => setFullName(e.target.value)}
+        value={fullName}
         label="Full Name"
       >
         <InputErrorMessage state={state.emailState} />
@@ -68,7 +71,8 @@ const UserInfo = ({ user }: { user: IUser }) => {
         type="text"
         placeholder="User Name"
         name="userName"
-        value={user.username}
+        onChange={(e) => setUsername(e.target.value)}
+        value={username}
         label="User Name"
       >
         <InputErrorMessage state={state.emailState} />
@@ -92,11 +96,12 @@ const UserInfo = ({ user }: { user: IUser }) => {
         onChange={(e) => setConfirmPassword(e.target.value)}
         label="Confirm Password"
       >
+             <InputErrorMessage state={state.passwordRepeatState} />
         <ConfirmPassword
           password={password}
           confirmPassword={confirmPassword}
         />
-        <InputErrorMessage state={state.passwordRepeatState} />
+   
       </Input>
 
       {/* Display form state message */}

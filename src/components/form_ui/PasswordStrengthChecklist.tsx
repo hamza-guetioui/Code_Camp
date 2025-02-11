@@ -24,7 +24,7 @@ const PasswordStrengthChecklist: React.FC<PasswordStrengthChecklistProps> = ({ p
         <div key={label} className="flex items-center gap-2 text-xs">
           <FontAwesomeIcon
             icon={faCircleCheck}
-            className={`transition-all duration-300 ease-in-out ${valid ? "text-green-500" : "text-slate-500"}`}
+            className={`transition-all duration-300 ease-in-out w-4 h-4 ${valid ? "text-green-500" : "text-slate-500"}`}
           />
           <p className={`text-sm ${valid ? "text-slate-900" : "text-slate-500"}`}>{label}</p>
         </div>

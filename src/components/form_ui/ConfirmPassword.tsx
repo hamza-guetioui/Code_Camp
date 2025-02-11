@@ -17,7 +17,7 @@ const ConfirmPassword: React.FC<ConfirmPasswordProps> = ({
     <div className="flex items-center gap-2">
       <FontAwesomeIcon
         icon={faCircleCheck}
-        className={`transition-all duration-300 ease-in-out text-xs ${
+        className={`transition-all duration-300 ease-in-out text-xs w-4 h-4 ${
           password && passwordMatch ? "text-green-500" : "text-slate-500"
         }`}
       />
