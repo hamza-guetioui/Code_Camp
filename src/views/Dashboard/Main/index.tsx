@@ -10,7 +10,7 @@ const Index = () => {
     <Container className="p-4 flex flex-col gap-4">
       <Title>Dashboard</Title>
       <Boxes />
-      <Container className="flex gap-4 ">
+      <Container className="flex gap-4 max-sm:flex-col ">
         <BasicBars />
         <PieArcLabel />
       </Container>

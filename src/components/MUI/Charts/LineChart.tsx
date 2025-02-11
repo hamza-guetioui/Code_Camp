@@ -1,14 +1,12 @@
 "use client";
 import * as React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
-import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 export default function BasicArea() {
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, px: 2 }}>
       <Paper
         elevation={4}
         sx={{
@@ -33,7 +31,7 @@ export default function BasicArea() {
         >
           This line chart displays the monthly rainfall in Seoul for the first half of the year.
         </Typography>
-        <Box sx={{ width: '100%', mt: 4 }}>
+        <Box sx={{ display: 'flex', mt: 4 }}>
           <LineChart
             xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
             series={[
@@ -42,11 +40,11 @@ export default function BasicArea() {
                 area: true,
               },
             ]}
-            width={800}
-            height={300}
+            // width={500}
+            height={350}
+            grid={{ vertical: true, horizontal: true }}
           />
         </Box>
       </Paper>
-    </Container>
   );
 }
