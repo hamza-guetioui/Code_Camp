@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Define routes that don't require authentication
-const publicRoutes = ["/login", "/register", "/reset"];
+const publicRoutes = ["/login", "/signup", "/reset"];
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token"); // Assuming authentication token is stored in cookies
-  const isAuth = !!token; // Convert to boolean
+  const isAuth = !!token || false; // Convert to boolean
   const pathname = request.nextUrl.pathname;
 
   // Allow access to public routes without authentication
